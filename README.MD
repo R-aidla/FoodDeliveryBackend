@@ -12,7 +12,7 @@ This program was written to gauge my skills in software development. It isn't a 
 ## Build Program
 
 With .NET installed, you can run the **build_rs.bat** for a Release build or **build_ds.bat** for a Debug build. The builds will be created in a folder inside the project file as **Builds/Release** and **Builds/Debug** respectively.
-You can also run debug builds in Visual Studio. In the IDE, you will also get the Swagger API debug page as well (This can also be ran in the builds as well but just removing/changing an if statement in **Program.cs**).
+You can also run debug builds in Visual Studio. In the IDE, you will also get the Swagger API debug page. (This can also be run in the builds by just removing/changing an if statement in **Program.cs**.)
 
 ## Don't forget!
 
