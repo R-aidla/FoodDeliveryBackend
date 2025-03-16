@@ -1,0 +1,6 @@
+@FoodDeliveryBackend_HostAddress = http://localhost:5055
+
+POST {{FoodDeliveryBackend_HostAddress}}/api/orders/calculate/
+Accept: application/json
+
+###
