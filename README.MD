@@ -1,6 +1,6 @@
 # This is a coding trial program!
 
-This program was written as a way to gadge my skills in software development. This isn't a fully backend delivery program but a part of it. Feel free to clone, fork, edit and run this program however you wish.
+This program was written to gauge my skills in software development. It isn't a fully working backend delivery program. It is only a part of it. Feel free to clone, fork, edit, and run this program however you wish.
 
 
 ## Requirements
@@ -16,4 +16,4 @@ You can also run debug builds in Visual Studio. In the IDE, you will also get th
 
 ## Don't forget!
 
-If you are going to use this program openly, **please go to the programs appsettings.json and change the secret keys!**
+If you are going to use this program openly, **please go to the program's appsettings.json and change the secret keys!**
