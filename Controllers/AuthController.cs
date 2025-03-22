@@ -28,13 +28,15 @@ namespace FoodDeliveryBackend.Controllers
 
             if (admin_key == config["Secrets:AdminKey"])
             {
-                Response.Cookies.Append("AdminKey", admin_key, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Expires = DateTime.UtcNow.AddHours(1)
-                });
+                bool.TryParse(config["ServerSettings:Secure"], out bool secure);
 
-                return Ok(new { Message = "Logged in, key stored in cookie" });
+                /*Response.Cookies.Append("AdminKey", admin_key, new CookieOptions
+                {
+                    Secure = secure,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                });*/
+
+                return Ok("Login successful! Inserted key matches secret.");
             }
             else
             {
@@ -46,11 +48,11 @@ namespace FoodDeliveryBackend.Controllers
         /// <summary>
         /// Logs out the user by deleting the auth cookie.
         /// </summary>
-        [HttpDelete("logout")]
+        /*[HttpDelete("logout")]
         public ActionResult<IEnumerable<Company>> Logout()
         {
             Response.Cookies.Delete("AdminKey");
             return Ok(new { Message = "Logged out, key deleted from cookie" });
-        }
+        }*/
     }
 }

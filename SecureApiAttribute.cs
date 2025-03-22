@@ -25,7 +25,7 @@ namespace FoodDeliveryBackend
         }
 
         /// <summary>
-        /// Checks the users cookie data, get and checks the secret key saved.
+        /// Checks the users cookie data and header, get and checks the secret key saved within both. Uses one of them if valid.
         /// </summary>
         public void OnAuthorization(AuthorizationFilterContext context)
         {

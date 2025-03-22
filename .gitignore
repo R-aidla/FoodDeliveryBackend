@@ -366,3 +366,4 @@ dev_dso.db-shm
 dev_dso.db-wal
 dev_dso.db
 Builds/
+/appsettings.Development.json

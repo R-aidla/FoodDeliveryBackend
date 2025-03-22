@@ -70,7 +70,11 @@ ServiceLocator.Provider = app.Services;
 // Configure the server to run on a user set address and port on Production.
 if (!app.Environment.IsDevelopment())
 {
-    var url = "http://" + builder.Configuration.GetSection("ServerSettings").GetValue("HostAddress", "localhost") + ":"
+    if (!bool.TryParse(builder.Configuration["ServerSettings:Secure"], out bool secure))
+        secure = false;
+
+    string httpString = secure ? "https://" : "http://";
+    var url = httpString + builder.Configuration.GetSection("ServerSettings").GetValue("HostAddress", "localhost") + ":"
         + builder.Configuration.GetSection("ServerSettings").GetValue("Port", "5000");
 
     Console.WriteLine("Setting Hosting Address to " + url);
