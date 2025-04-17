@@ -35,7 +35,7 @@ jobs:
       run: |
         response=$(curl -s -o response.txt -w "%{http_code}" http://localhost:5000/api/weather/latest)
         cat response.txt
-        if [ "$response" != "200" ]; then
+        if ( "$response" != "200" ); then
           echo "Expected HTTP 200 but got $response"
           exit 1
         fi
