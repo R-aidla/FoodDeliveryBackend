@@ -26,19 +26,38 @@ jobs:
     - name: Build app
       run: dotnet build --no-restore
 
-    - name: Run the web app in background
+    - name: Run the web and send test GET request.
       shell: pwsh
       run: |
-        Start-Process -FilePath "dotnet" -ArgumentList "run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000" -NoNewWindow
-        Start-Sleep -Seconds 10
+        $job = Start-Job { dotnet run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000 }
+        
+        # Wait until the app is ready
+        $maxRetries = 10
+        $delay = 2
+        for ($i = 0; $i -lt $maxRetries; $i++) {
+          try {
+            Invoke-WebRequest -Uri http://localhost:5000/api/weather/latest -UseBasicParsing -TimeoutSec 2
+            Write-Host "Server is ready!"
+            break
+          } catch {
+            Write-Host "Waiting for server to start... ($i/$maxRetries)"
+            Start-Sleep -Seconds $delay
+          }
+        }
 
-    - name: Send test request
-      shell: pwsh
-      run: |
+        if ($i -eq $maxRetries) {
+          Write-Error "Server did not start in time"
+          exit 1
+        }
+        
+        # Actual test
         $response = Invoke-WebRequest -Uri http://localhost:5000/api/weather/latest -UseBasicParsing
-        Write-Output "Status Code: $($response.StatusCode)"
+        Write-Host "Status Code: $($response.StatusCode)"
         
         if ($response.StatusCode -ne 200) {
           Write-Error "Expected HTTP 200 but got $($response.StatusCode)"
           exit 1
         }
+
+        # Clean up
+        Stop-Job $job
