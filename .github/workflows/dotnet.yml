@@ -26,10 +26,11 @@ jobs:
     - name: Build app
       run: dotnet build --no-restore
 
-    - name: Run the web app
+    - name: Run the web app in background
+      shell: pwsh
       run: |
-        dotnet run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000 &
-        sleep 6
+        Start-Process -FilePath "dotnet" -ArgumentList "run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000" -NoNewWindow
+        Start-Sleep -Seconds 10
 
     - name: Send test request
       shell: pwsh
