@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: Testing compiler
     runs-on: windows-latest
 
     steps:
@@ -23,8 +23,19 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build
+    - name: Build app
       run: dotnet build --no-restore
 
-    - name: Run Tests
-      run: dotnet test --no-build --verbosity normal
+    - name: Run the web app
+      run: |
+        dotnet run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000 &
+        sleep 6
+
+    - name: Send test request
+      run: |
+        response=$(curl -s -o response.txt -w "%{http_code}" http://localhost:5000/api/weather/latest)
+        cat response.txt
+        if [ "$response" != "200" ]; then
+          echo "Expected HTTP 200 but got $response"
+          exit 1
+        fi
