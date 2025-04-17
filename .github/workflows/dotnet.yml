@@ -32,10 +32,12 @@ jobs:
         sleep 6
 
     - name: Send test request
+      shell: pwsh
       run: |
-        response=$(curl -s -o response.txt -w "%{http_code}" http://localhost:5000/api/weather/latest)
-        cat response.txt
-        if [ "$response" != "200" ]; then
-          echo "Expected HTTP 200 but got $response"
+        $response = Invoke-WebRequest -Uri http://localhost:5000/api/weather/latest -UseBasicParsing
+        Write-Output "Status Code: $($response.StatusCode)"
+        
+        if ($response.StatusCode -ne 200) {
+          Write-Error "Expected HTTP 200 but got $($response.StatusCode)"
           exit 1
-        fi
+        }
