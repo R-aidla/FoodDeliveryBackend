@@ -58,7 +58,7 @@ jobs:
       run: |
         $adminKey = 'your_secret_key' # THIS IS A PLACEHOLDER, DEFAULT KEY! NOT AN ACTUAL SECERT KEY.
         $headers = @{ "X-API-Key" = "$adminKey" }
-        $response = Invoke-WebRequest -Uri http://localhost:5000/api/weather -Headers $headers -UseBasicParsing
+        $response = Invoke-WebRequest -Uri http://localhost:5000/api/weather/latest -Headers $headers -UseBasicParsing
         Write-Host "Secure GET with key Response: [$($response.StatusCode)] $($response.Content)"
         if ($response.StatusCode -ne 200) { exit 1 }
 
@@ -66,5 +66,5 @@ jobs:
       if: always()
       shell: pwsh
       run: |
-        $pid = Get-Content server-process.pid
-        Stop-Process -Id $pid -Force
+        $serverPid = Get-Content server-process.pid
+        Stop-Process -Id $serverPid -Force
