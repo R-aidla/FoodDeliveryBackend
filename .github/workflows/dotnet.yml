@@ -2,8 +2,22 @@ name: .NET Build & Test for Windows
 
 on:
   push:
+    paths-ignore:
+      - '.config/**'
+      - 'ENG_Documentation.pdf'
+      - '.gitattributes'
+      - '.gitignore'
+      - 'README.MD'
+      - 'LICENSE.txt'
     branches: [ main ]
   pull_request:
+    paths-ignore:
+      - '.config/**'
+      - 'ENG_Documentation.pdf'
+      - '.gitattributes'
+      - '.gitignore'
+      - 'README.MD'
+      - 'LICENSE.txt'
     branches: [ main ]
 
 jobs:
