@@ -39,18 +39,14 @@ jobs:
       run: |
         $response = Invoke-WebRequest -Uri http://localhost:5000/api/companies -UseBasicParsing
         Write-Host "Server responded with: $($response.StatusCode)"
-        if ($response.StatusCode -ne 200) {
-        exit 1
-        }
+        if ($response.StatusCode -ne 200) { exit 1 }
 
     - name: Send GET request to auth-protected endpoint WITHOUT key
       shell: pwsh
       run: |
         $response = Invoke-WebRequest -Uri http://localhost:5000/api/weather -UseBasicParsing
         Write-Host "Response: [$($response.StatusCode)] $($response.Content)"
-        if ($response.StatusCode -ne 401) {
-        exit 1
-        }
+        if ($response.StatusCode -ne 401) { exit 1 }
 
     - name: Send GET request to auth-protected endpoint with key
       shell: pwsh
@@ -59,14 +55,11 @@ jobs:
         $headers = @{ "X-API-Key" = "$adminKey" }
         $response = Invoke-WebRequest -Uri http://localhost:5000/api/weather -Headers $headers -UseBasicParsing
         Write-Host "Response: [$($response.StatusCode)] $($response.Content)"
-        if ($response.StatusCode -ne 200) {
-        exit 1
-        }
+        if ($response.StatusCode -ne 200) { exit 1 }
 
     - name: Kill server process if still running
       if: always()
       shell: pwsh
       run: |
-        $jobId = Get-Content server-job.id
-        Stop-Job -Id $jobId -Force
-        Remove-Job -Id $jobId
+        $pid = Get-Content server-process.pid
+        Stop-Process -Id $pid -Force

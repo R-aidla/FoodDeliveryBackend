@@ -1,9 +1,6 @@
-# Start the server as a background job
-$script = {
-  dotnet run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000
-}
-$job = Start-Job -ScriptBlock $script
-Set-Content -Path "server-job.id" -Value $job.Id
+# Start the server as a background process (detached)
+$process = Start-Process -FilePath "dotnet" -ArgumentList 'run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000' -PassThru
+Set-Content -Path "server-process.pid" -Value $process.Id
 
 # Wait for server to be up
 $maxRetries = 10
@@ -21,7 +18,6 @@ for ($i = 0; $i -lt $maxRetries; $i++) {
 
 if ($i -eq $maxRetries) {
   Write-Error "Server did not start in time"
-  Stop-Job -Id $job.Id
-  Remove-Job -Id $job.Id
+  Stop-Process -Id $process.Id
   exit 1
 }
