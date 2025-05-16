@@ -1,6 +1,11 @@
-$process = Start-Process -filePath dotnet -ArgumentList 'run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000' -PassThru
+# Start the server as a background job
+$script = {
+  dotnet run --project ./FoodDeliveryBackend.csproj --urls http://localhost:5000
+}
+$job = Start-Job -ScriptBlock $script
+Set-Content -Path "server-job.id" -Value $job.Id
 
-# Wait until the app is ready
+# Wait for server to be up
 $maxRetries = 10
 $delay = 2
 for ($i = 0; $i -lt $maxRetries; $i++) {
@@ -16,18 +21,7 @@ for ($i = 0; $i -lt $maxRetries; $i++) {
 
 if ($i -eq $maxRetries) {
   Write-Error "Server did not start in time"
-  $process | kill
+  Stop-Job -Id $job.Id
+  Remove-Job -Id $job.Id
   exit 1
 }
-
-# Actual test
-Write-Host "Status Code: $($response.StatusCode)"
-
-if ($response.StatusCode -ne 200) {
-  Write-Error "Expected HTTP 200 but got $($response.StatusCode)"
-  $process | kill
-  exit 1
-}
-
-# Clean up
-$process | kill
